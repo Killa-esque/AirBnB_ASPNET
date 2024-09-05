@@ -1,0 +1,21 @@
+# Ignore bin and obj folders
+**/bin/
+**/obj/
+
+# Ignore build output and temporary files
+*.log
+*.vspscc
+*.vssscc
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+*.sqlite
+
+# Ignore app settings for security reasons (if needed)
+# appsettings.jsons
+appsettings.Development.json
+appsettings.Production.json
+
+# Ignore .vscode settings folder if needed
+.vscode/

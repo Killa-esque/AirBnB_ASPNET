@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AirBnBWebApi.Core\AirBnBWebApi.Core.csproj" />
+    <ProjectReference Include="..\AirBnBWebApi.Infrastructure\AirBnBWebApi.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
