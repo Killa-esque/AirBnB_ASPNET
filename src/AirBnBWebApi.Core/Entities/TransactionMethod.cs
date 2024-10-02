@@ -7,15 +7,15 @@ using AirBnBWebApi.Core.Enums;
 
 namespace AirBnBWebApi.Core.Entities;
 
-public class Review
+public class TransactionMethod
 {
     public int Id { get; set; }
-    public RatingEnum Rating { get; set; }
-    public string Comment { get; set; }
-    public DateTime ReviewDate { get; set; }
-    public int PropertyId { get; set; }
     public int UserId { get; set; }
-    public bool IsDeleted { get; set; }
+    public User User { get; set; }
+    public TransactionMethodEnum MethodType { get; set; }
+    public string CardNumber { get; set; }
+    public string CardHolderName { get; set; }
+    public DateTime ExpiryDate { get; set; }
+    public string Cvv { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
 }

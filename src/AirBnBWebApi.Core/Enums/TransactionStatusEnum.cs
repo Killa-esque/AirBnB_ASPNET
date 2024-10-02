@@ -3,12 +3,10 @@
 
 namespace AirBnBWebApi.Core.Enums;
 
-public enum RatingEnum
+public enum TransactionStatusEnum
 {
-    One = 1,
-    Two = 2,
-    Three = 3,
-    Four = 4,
-    Five = 5
+    Pending,
+    Success,
+    Failed,
+    Refunded
 }
-

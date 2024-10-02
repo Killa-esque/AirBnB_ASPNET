@@ -4,6 +4,7 @@ using AirBnBWebApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnBWebApi.Infrastructure.Migrations
 {
     [DbContext(typeof(AirBnBDbContext))]
-    partial class AirBnBDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241001185346_Init_Migration")]
+    partial class Init_Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

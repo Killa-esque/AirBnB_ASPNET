@@ -1,7 +1,10 @@
-namespace AirBnBWebApi.Core.Enum
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+namespace AirBnBWebApi.Core.Enums;
+
+public enum PropertyTypeEnum
 {
-  public enum PropertyTypeEnum
-  {
     Apartment,           // Căn hộ
     House,               // Nhà riêng
     SecondaryUnit,       // Đơn vị thứ cấp (ví dụ: guesthouse)
@@ -12,5 +15,5 @@ namespace AirBnBWebApi.Core.Enum
     PrivateRoom,         // Phòng riêng
     HotelRoom,           // Phòng khách sạn
     SharedRoom           // Phòng chung
-  }
 }
+
