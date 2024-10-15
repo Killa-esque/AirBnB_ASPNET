@@ -16,7 +16,7 @@ public class ApiKey
     // Define a collection of permissions for the API key
     public virtual ICollection<ApiPermission> ApiPermissions { get; set; }
 
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public virtual User User { get; set; }
 }
 

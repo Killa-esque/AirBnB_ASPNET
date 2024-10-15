@@ -10,62 +10,60 @@ namespace AirBnBWebApi.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<KeyToken> KeyTokens { get; set; }
         public DbSet<RefreshTokenUsed> RefreshTokenUseds { get; set; }
-        public DbSet<ApiKey> ApiKeys { get; set; }
-        public DbSet<ApiPermission> ApiPermissions { get; set; }
         public DbSet<Property> Properties { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionMethod> TransactionMethods { get; set; }
-        public DbSet<TransactionLog> TransactionLogs { get; set; }
+        // public DbSet<Reservation> Reservations { get; set; }
+        // public DbSet<Transaction> Transactions { get; set; }
+        // public DbSet<TransactionMethod> TransactionMethods { get; set; }
+        // public DbSet<TransactionLog> TransactionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Transaction
-            modelBuilder.Entity<Transaction>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.HasIndex(e => new { e.UserId, e.MerchantId });
-                entity.Property(e => e.Amount)
-                    .HasPrecision(18, 2);
+            // modelBuilder.Entity<Transaction>(entity =>
+            // {
+            //     entity.HasKey(e => e.Id);
+            //     entity.HasIndex(e => new { e.UserId, e.MerchantId });
+            //     entity.Property(e => e.Amount)
+            //         .HasPrecision(18, 2);
 
-                // (1-n)
-                entity.HasOne<TransactionMethod>()
-                    .WithMany()
-                    .HasForeignKey(e => e.TransactionMethodId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            //     // (1-n)
+            //     entity.HasOne<TransactionMethod>()
+            //         .WithMany()
+            //         .HasForeignKey(e => e.TransactionMethodId)
+            //         .OnDelete(DeleteBehavior.Restrict);
 
-                // (1-1)
-                entity.HasOne<Reservation>()
-                    .WithOne()
-                    .HasForeignKey<Transaction>(e => e.ReservationId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            //     // (1-1)
+            //     entity.HasOne<Reservation>()
+            //         .WithOne()
+            //         .HasForeignKey<Transaction>(e => e.ReservationId)
+            //         .OnDelete(DeleteBehavior.Cascade);
+            // });
 
-            // TransactionLog
-            modelBuilder.Entity<TransactionLog>(entity =>
-            {
-                entity.HasKey(e => e.Id); // Primary Key
+            // // TransactionLog
+            // modelBuilder.Entity<TransactionLog>(entity =>
+            // {
+            //     entity.HasKey(e => e.Id); // Primary Key
 
-                // (1-n)
-                entity.HasOne<Transaction>()
-                    .WithMany()
-                    .HasForeignKey(e => e.TransactionId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            //     // (1-n)
+            //     entity.HasOne<Transaction>()
+            //         .WithMany()
+            //         .HasForeignKey(e => e.TransactionId)
+            //         .OnDelete(DeleteBehavior.Cascade);
+            // });
 
-            // TransactionMethod
-            modelBuilder.Entity<TransactionMethod>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.HasIndex(e => e.UserId);
+            // // TransactionMethod
+            // modelBuilder.Entity<TransactionMethod>(entity =>
+            // {
+            //     entity.HasKey(e => e.Id);
+            //     entity.HasIndex(e => e.UserId);
 
-                entity.Property(e => e.CardNumber)
-                    .HasMaxLength(16);
-                entity.Property(e => e.Cvv)
-                    .HasMaxLength(4);
-            });
+            //     entity.Property(e => e.CardNumber)
+            //         .HasMaxLength(16);
+            //     entity.Property(e => e.Cvv)
+            //         .HasMaxLength(4);
+            // });
 
             // Review
             modelBuilder.Entity<Review>(entity =>
@@ -88,28 +86,28 @@ namespace AirBnBWebApi.Infrastructure.Data
             });
 
             // Reservation
-            modelBuilder.Entity<Reservation>(entity =>
-            {
-                entity.HasKey(e => e.Id);
+            // modelBuilder.Entity<Reservation>(entity =>
+            // {
+            //     entity.HasKey(e => e.Id);
 
-                // Change this line to use NO ACTION instead of CASCADE
-                entity.HasOne<Transaction>()
-                    .WithOne()
-                    .HasForeignKey<Reservation>(e => e.TransactionId)
-                    .OnDelete(DeleteBehavior.NoAction);  // Change from DeleteBehavior.Cascade to DeleteBehavior.NoAction
+            //     // Change this line to use NO ACTION instead of CASCADE
+            //     // entity.HasOne<Transaction>()
+            //     //     .WithOne()
+            //     //     .HasForeignKey<Reservation>(e => e.TransactionId)
+            //     //     .OnDelete(DeleteBehavior.NoAction);  // Change from DeleteBehavior.Cascade to DeleteBehavior.NoAction
 
-                entity.HasOne<Property>()
-                    .WithMany()
-                    .HasForeignKey(e => e.PropertyId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            //     entity.HasOne<Property>()
+            //         .WithMany()
+            //         .HasForeignKey(e => e.PropertyId)
+            //         .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+            //     entity.HasOne<User>()
+            //         .WithMany()
+            //         .HasForeignKey(e => e.UserId)
+            //         .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasIndex(e => new { e.UserId, e.PropertyId });
-            });
+            //     entity.HasIndex(e => new { e.UserId, e.PropertyId });
+            // });
 
             // Property
             modelBuilder.Entity<Property>(entity =>
@@ -178,26 +176,6 @@ namespace AirBnBWebApi.Infrastructure.Data
                       .WithMany(kt => kt.RefreshTokensUsed)
                       .HasForeignKey(rt => rt.UserId)  // Sử dụng UserId làm khóa ngoại
                       .OnDelete(DeleteBehavior.Cascade);  // Xóa KeyToken sẽ xóa các RefreshTokenUsed liên quan
-            });
-
-            // Cấu hình bảng ApiKey
-            modelBuilder.Entity<ApiKey>(entity =>
-            {
-                entity.HasKey(ak => ak.ApiKeyId);  // Khóa chính là ApiKeyId
-                entity.HasOne(ak => ak.User)
-                      .WithMany(u => u.ApiKeys)
-                      .HasForeignKey(ak => ak.UserId)
-                      .OnDelete(DeleteBehavior.Cascade);  // Xóa User sẽ xóa luôn ApiKey của User đó
-            });
-
-            // Cấu hình bảng ApiPermission
-            modelBuilder.Entity<ApiPermission>(entity =>
-            {
-                entity.HasKey(ap => ap.ApiPermissionId);  // Khóa chính là ApiPermissionId
-                entity.HasOne(ap => ap.ApiKey)
-                      .WithMany(ak => ak.ApiPermissions)
-                      .HasForeignKey(ap => ap.ApiKeyId)
-                      .OnDelete(DeleteBehavior.Cascade);  // Xóa ApiKey sẽ xóa luôn các ApiPermission liên quan
             });
 
             base.OnModelCreating(modelBuilder);

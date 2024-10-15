@@ -18,15 +18,6 @@ public static class ResponseHelper
         };
     }
 
-    // Phương thức trả về HTTP 200 cho danh sách item
-    public static IActionResult SuccessList<T>(T payload, string message = "Request was successful.")
-    {
-        return new JsonResult(new ApiResponse<T>(true, StatusCodes.Status200OK, message, payload))
-        {
-            StatusCode = StatusCodes.Status200OK
-        };
-    }
-
     // Phương thức trả về HTTP 201 Created
     public static IActionResult Created<T>(T payload, string message = "Resource created successfully.")
     {
@@ -125,4 +116,6 @@ public static class ResponseHelper
             StatusCode = StatusCodes.Status400BadRequest
         };
     }
+
+
 }

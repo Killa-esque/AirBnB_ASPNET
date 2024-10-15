@@ -3,12 +3,14 @@
 
 using AirBnBWebApi.Core.Entities;
 using AirBnBWebApi.Infrastructure.Interfaces;
+using AirBnBWebApi.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AirBnBWebApi.Services.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
 
@@ -19,26 +21,32 @@ public class UserService
 
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
-        return await _userRepository.GetAllAsync().ConfigureAwait(false);
+        return await _userRepository.GetAllAsync();
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<User> GetUserByIdAsync(Guid id)
     {
-        return await _userRepository.GetByIdAsync(id).ConfigureAwait(false);
+        return await _userRepository.GetByIdAsync(id);
     }
 
-    public async Task CreateUserAsync(User newUser)
+    public async Task<User> GetUserByEmailAsync(string email)
     {
-        await _userRepository.AddAsync(newUser).ConfigureAwait(false);
+        return await _userRepository.GetByEmailAsync(email);
     }
 
-    public async Task<bool> UpdateUserAsync(User updateUser)
+    public async Task CreateUserAsync(User user)
     {
-        return await _userRepository.UpdateAsync(updateUser).ConfigureAwait(false);
+        await _userRepository.AddAsync(user);
     }
 
-    public async Task<bool> DeleteUserAsync(int id)
+    public async Task UpdateUserAsync(User user)
     {
-        return await _userRepository.DeleteAsync(id).ConfigureAwait(false);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task DeleteUserAsync(Guid id)
+    {
+        await _userRepository.DeleteAsync(id);
     }
 }
+

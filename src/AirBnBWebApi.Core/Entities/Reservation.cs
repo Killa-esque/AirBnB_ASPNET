@@ -14,7 +14,7 @@ public class Reservation
     public DateTime CheckOutDate { get; set; }
     public int NumberOfGuests { get; set; }
     public int PropertyId { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public bool IsDeleted { get; set; }
     public int TransactionId { get; set; }
     public TransactionStatusEnum ReservationStatus { get; set; }

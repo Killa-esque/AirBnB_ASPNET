@@ -2,48 +2,48 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.AspNetCore.Mvc;
-using AirBnBWebApi.Services.Services;
+using AirBnBWebApi.Core.Entities;
+using AirBnBWebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using AirBnBWebApi.Api.Helpers;
 
 namespace AirBnBWebApi.Api.Controllers;
-
-[ApiController]
+[Authorize()]
 [Route("api/[controller]")]
+[ApiController]
 public class UserController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
-    public UserController(UserService userService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(int id)
-    {
-        var user = await _userService.GetUserByIdAsync(id).ConfigureAwait(false);
-        if (user == null)
-        {
-            return ResponseHelper.NotFound("User not found.");
-        }
-
-        var userDto = new
-        {
-            user.Id,
-            user.FullName,
-            user.Email,
-            user.PhoneNumber,
-            user.Avatar,
-            user.IsHost
-        };
-
-        return ResponseHelper.Success(userDto, "User fetched successfully.");
-    }
 
     [HttpGet]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetAllUsers()
     {
-        var users = await _userService.GetAllUsersAsync().ConfigureAwait(false);
-        return ResponseHelper.SuccessList(users, "Users fetched successfully.");
+        var userList = await _userService.GetAllUsersAsync();
+
+        return ResponseHelper.Success(userList);
     }
+
+    // [HttpGet("{id}")]
+    // public async Task<IActionResult> GetUserById(Guid id)
+    // {
+    // }
+
+    // [HttpPost]
+    // public async Task<IActionResult> CreateUser([FromBody] User user)
+    // {
+    // }
+    // [HttpPut("{id}")]
+    // public async Task<IActionResult> UpdateUser(Guid id, [FromBody] User user)
+    // {
+    // }
+    // [HttpDelete("{id}")]
+    // public async Task<IActionResult> DeleteUser(Guid id)
+    // {
+    // }
 }

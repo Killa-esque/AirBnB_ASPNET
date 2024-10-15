@@ -4,6 +4,7 @@
 
 namespace AirBnBWebApi.Services.Services;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Globalization;
@@ -13,31 +14,41 @@ using System.Text;
 
 public class JwtService
 {
-    public (string accessToken, string refreshToken) GenerateTokens(int userId, string email, bool isHost, string publicKey, string privateKey)
+    private readonly IConfiguration _configuration;
+    public JwtService(IConfiguration configuration)
     {
-        var accessToken = CreateToken(userId, email, isHost, publicKey, 2);
+        _configuration = configuration;
+    }
+    public (string accessToken, string refreshToken) GenerateTokens(Guid userId, string email, bool isHost, bool isAdmin, bool isUser, string publicKey, string privateKey)
+    {
+        var accessToken = CreateToken(userId, email, isHost, isAdmin, publicKey, 10, false);
 
-        var refreshToken = CreateToken(userId, email, isHost, privateKey, 7);
+        var refreshToken = CreateToken(userId, email, isHost, isAdmin, privateKey, 3, true);
 
         return (accessToken, refreshToken);
     }
 
-    private static string CreateToken(int userId, string email, bool isHost, string secret, int expirationInDays)
+    private string CreateToken(Guid userId, string email, bool isHost, bool isAdmin, string secret, int expirationTime, bool isCreateRefreshToken = false)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString(CultureInfo.InvariantCulture)),
+            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, email),
-            new Claim("Role", isHost ? "Host" : "Guest"),
+            new Claim("Role", isHost ? "Host" : isAdmin ? "Admin" : "User"),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var issuer = _configuration["JwtSettings:Issuer"];
+        var audience = _configuration["JwtSettings:Audience"];
+
         var token = new JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(expirationInDays),
+            expires: isCreateRefreshToken ? DateTime.UtcNow.AddDays(expirationTime) : DateTime.UtcNow.AddMinutes(expirationTime),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -52,8 +63,8 @@ public class JwtService
         {
             var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
                 ValidateLifetime = true,
                 IssuerSigningKey = key,
                 ValidateIssuerSigningKey = true,

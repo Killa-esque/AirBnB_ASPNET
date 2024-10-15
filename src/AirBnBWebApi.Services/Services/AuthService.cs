@@ -44,11 +44,17 @@ public class AuthService
 
         var user = new User
         {
+            Id = Guid.NewGuid(), // Nếu Id là kiểu Guid, tạo Guid mới.
             Email = email,
             FullName = fullName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
             PhoneNumber = phoneNumber,
             IsHost = false,
+            IsAdmin = false,
+            isUser = true,
+            IsDeleted = false,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         try
@@ -67,7 +73,7 @@ public class AuthService
                     return (false, null, null, null, null, "KeyToken creation failed.");
                 }
 
-                var (accessToken, refreshToken) = _jwtService.GenerateTokens(newUser.Entity.Id, newUser.Entity.Email, newUser.Entity.IsHost, keyToken.PublicKey, keyToken.PrivateKey);
+                var (accessToken, refreshToken) = _jwtService.GenerateTokens(newUser.Entity.Id, newUser.Entity.Email, newUser.Entity.IsHost, newUser.Entity.IsAdmin, newUser.Entity.isUser, keyToken.PublicKey, keyToken.PrivateKey);
 
                 return (true, user.Email, user.FullName, accessToken, refreshToken, "User registered successfully.");
             }

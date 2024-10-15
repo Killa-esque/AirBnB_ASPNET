@@ -9,12 +9,12 @@ namespace AirBnBWebApi.Core.Entities;
 
 public class Review
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public RatingEnum Rating { get; set; }
     public string Comment { get; set; }
     public DateTime ReviewDate { get; set; }
     public int PropertyId { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

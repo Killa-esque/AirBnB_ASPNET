@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using AirBnBWebApi.Core.Entities;
 using AirBnBWebApi.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirBnBWebApi.Services.Services;
 
@@ -18,7 +19,7 @@ public class KeyTokenService
     }
 
     // Create keyToken
-    public async Task<(bool status, int code, KeyToken keyToken)> CreateKeyTokenAsync(int userId, string publicKey, string privateKey)
+    public async Task<(bool status, int code, KeyToken keyToken)> CreateKeyTokenAsync(Guid userId, string publicKey, string privateKey)
     {
         var token = new KeyToken
         {
@@ -47,6 +48,17 @@ public class KeyTokenService
             // Bắt ngoại lệ nếu có lỗi xảy ra và trả về mã trạng thái lỗi
             return (false, 500, null);
         }
+    }
+    public async Task<(bool status, string publicKey)> GetUserPublicKeyAsync(Guid userId)
+    {
+        var keyToken = await _context.KeyTokens.AsNoTracking().FirstOrDefaultAsync(k => k.UserId == userId);
+
+        if (keyToken == null)
+        {
+            return (false, null);
+        }
+
+        return (true, keyToken.PublicKey);
     }
 }
 

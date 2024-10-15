@@ -10,7 +10,7 @@ namespace AirBnBWebApi.Core.Entities;
 public class TransactionMethod
 {
     public int Id { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public User User { get; set; }
     public TransactionMethodEnum MethodType { get; set; }
     public string CardNumber { get; set; }

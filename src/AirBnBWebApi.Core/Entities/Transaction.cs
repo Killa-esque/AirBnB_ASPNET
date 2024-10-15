@@ -11,7 +11,7 @@ public class Transaction
 {
     public int Id { get; set; }
     public decimal Amount { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public int MerchantId { get; set; }
     public int ReservationId { get; set; }
     public DateTime TransactionDate { get; set; }

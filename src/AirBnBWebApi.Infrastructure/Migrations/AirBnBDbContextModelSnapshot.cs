@@ -22,58 +22,10 @@ namespace AirBnBWebApi.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.ApiKey", b =>
-                {
-                    b.Property<int>("ApiKeyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApiKeyId"), 1L, 1);
-
-                    b.Property<string>("ApiKeyString")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApiKeyId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ApiKeys");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.ApiPermission", b =>
-                {
-                    b.Property<int>("ApiPermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApiPermissionId"), 1L, 1);
-
-                    b.Property<int>("ApiKeyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Permission")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ApiPermissionId");
-
-                    b.HasIndex("ApiKeyId");
-
-                    b.ToTable("ApiPermissions");
-                });
-
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.KeyToken", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PrivateKey")
                         .HasColumnType("nvarchar(max)");
@@ -220,8 +172,8 @@ namespace AirBnBWebApi.Infrastructure.Migrations
 
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.RefreshTokenUsed", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(450)");
@@ -234,66 +186,11 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                     b.ToTable("RefreshTokenUseds");
                 });
 
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.Reservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CancellationReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("NumberOfGuests")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservationStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PropertyId");
-
-                    b.HasIndex("TransactionId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "PropertyId");
-
-                    b.ToTable("Reservations");
-                });
-
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -316,8 +213,8 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -328,117 +225,11 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("MerchantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TransactionMethodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TransactionStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReservationId")
-                        .IsUnique();
-
-                    b.HasIndex("TransactionMethodId");
-
-                    b.HasIndex("UserId", "MerchantId");
-
-                    b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.TransactionLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Log")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("TransactionLogs");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.TransactionMethod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CardHolderName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardNumber")
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Cvv")
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MethodType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TransactionMethods");
-                });
-
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
@@ -451,6 +242,9 @@ namespace AirBnBWebApi.Infrastructure.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -467,31 +261,12 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("isUser")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.ApiKey", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.User", "User")
-                        .WithMany("ApiKeys")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.ApiPermission", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.ApiKey", "ApiKey")
-                        .WithMany("ApiPermissions")
-                        .HasForeignKey("ApiKeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApiKey");
                 });
 
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.KeyToken", b =>
@@ -525,27 +300,6 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                     b.Navigation("KeyToken");
                 });
 
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.Reservation", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.Property", null)
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AirBnBWebApi.Core.Entities.Transaction", null)
-                        .WithOne()
-                        .HasForeignKey("AirBnBWebApi.Core.Entities.Reservation", "TransactionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("AirBnBWebApi.Core.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.Review", b =>
                 {
                     b.HasOne("AirBnBWebApi.Core.Entities.Property", null)
@@ -561,46 +315,6 @@ namespace AirBnBWebApi.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.Transaction", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.Reservation", null)
-                        .WithOne()
-                        .HasForeignKey("AirBnBWebApi.Core.Entities.Transaction", "ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AirBnBWebApi.Core.Entities.TransactionMethod", null)
-                        .WithMany()
-                        .HasForeignKey("TransactionMethodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.TransactionLog", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.Transaction", null)
-                        .WithMany()
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.TransactionMethod", b =>
-                {
-                    b.HasOne("AirBnBWebApi.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AirBnBWebApi.Core.Entities.ApiKey", b =>
-                {
-                    b.Navigation("ApiPermissions");
-                });
-
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.KeyToken", b =>
                 {
                     b.Navigation("RefreshTokensUsed");
@@ -608,8 +322,6 @@ namespace AirBnBWebApi.Infrastructure.Migrations
 
             modelBuilder.Entity("AirBnBWebApi.Core.Entities.User", b =>
                 {
-                    b.Navigation("ApiKeys");
-
                     b.Navigation("KeyToken");
                 });
 #pragma warning restore 612, 618
