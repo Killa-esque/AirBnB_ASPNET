@@ -1,7 +1,7 @@
 export interface JwtPayload {
   sub: string;      // User ID (subject)
   email: string;    // Email của người dùng
-  Role: string;     // Vai trò của người dùng (User, Admin, etc.)
+  Role: 'User' | 'Host' | 'Admin';     // Vai trò của người dùng (User, Admin, etc.)
   jti: string;      // Token ID
   exp: number;      // Expiration time (UNIX timestamp)
   iss: string;      // Issuer (Server phát hành token)

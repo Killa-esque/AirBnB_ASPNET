@@ -1,24 +1,33 @@
-import { createContext, useState, ReactNode, FC } from 'react';
-import { NotificationContextProps, Notification } from '@/types';
+import { NotificationContextType } from "@/types";
+import React, { createContext, useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export const NotificationContext = createContext<NotificationContextProps | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export const NotificationProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+export const useNotification = (): NotificationContextType => {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error("useNotification must be used within a NotificationProvider");
+  }
+  return context;
+};
 
-  const addNotification = (notification: Notification) => {
-    setNotifications((prevNotifications) => [...prevNotifications, notification]);
-  };
-
-  const removeNotification = (id: number) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.id !== id)
-    );
+// NotificationProvider cung cấp logic thông báo cho toàn bộ ứng dụng
+export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const handleNotification = (content: string, type: "info" | "success" | "warning" | "error") => {
+    return toast[type](content, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+    });
   };
 
   return (
-    <NotificationContext.Provider value={{ notifications, addNotification, removeNotification }}>
+    <NotificationContext.Provider value={{ handleNotification }}>
       {children}
+      <ToastContainer />
     </NotificationContext.Provider>
   );
 };

@@ -1,24 +1,37 @@
-import { createContext, useState, ReactNode, FC, useContext } from 'react';
-import { User, AuthContextProps } from '@/types';
+import { createContext, useState, useEffect, ReactNode } from 'react';
+import { storage } from '@/utils';
+import storageKeys from '@/constants/storageKeys';
+import { AuthContextProps, User } from '@/types';
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+export const AuthContext = createContext<AuthContextProps>({
+  user: null,
+  signOut: () => { },
+});
 
-  const login = (userData: User) => {
-    setUser(userData);
-    setIsLoggedIn(!!!isLoggedIn);
-  };
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(storage.get(storageKeys.USER));
 
-  const logout = () => {
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUser(storage.get(storageKeys.USER));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  const signOut = () => {
+    storage.clear();
     setUser(null);
-    setIsLoggedIn(!!!isLoggedIn);
+    window.location.reload();
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, signOut }}>
       {children}
     </AuthContext.Provider>
   );

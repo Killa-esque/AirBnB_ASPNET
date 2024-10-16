@@ -1,7 +1,8 @@
 import { JwtPayload } from "@/types";
-import { decodeToken, isTokenExpired } from "@/utils/jwt";
 import axios from "axios";
+import { decodeToken, isTokenExpired } from "@/utils/jwt";
 import { CONFIG } from "@/config/appConfig";
+import { history } from "@/main";
 
 const https = axios.create({
   baseURL: CONFIG.API.BASE_URL,
@@ -20,7 +21,7 @@ https.interceptors.request.use(
 
       if (isTokenExpired(accessToken)) {
         alert('Token has expired. Please login again.');
-        window.location.href = '/login';
+        history.push('/login');
         return Promise.reject(new Error('Token has expired'));
       }
 
@@ -39,3 +40,7 @@ https.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+
+export default https;
+
