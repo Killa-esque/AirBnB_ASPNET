@@ -1,6 +1,5 @@
 import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
 import {
   DashboardOutlined,
   ToolOutlined,
@@ -8,6 +7,8 @@ import {
   TeamOutlined,
   EnvironmentOutlined,
 } from '@ant-design/icons';
+
+import logo from "@/assets/images/logo.png";
 
 interface MenuItem {
   key: string;

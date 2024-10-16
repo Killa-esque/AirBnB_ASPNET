@@ -8,4 +8,4 @@ const Revenue = (props: Props) => {
   )
 }
 
-export default Revenue;
+export default Revenue
